@@ -48,7 +48,7 @@ class SnippetSerializer(serializers.Serializer):
         instance.language = validated_data.get('language', instance.language)
         instance.style = validated_data.get('style', instance.style)
         instance.save()
-        return instance
+        return instances
 
 class SnippetModelSerializer(serializers.ModelSerializer):
     class Meta:
