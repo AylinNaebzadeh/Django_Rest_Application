@@ -8,10 +8,11 @@ from .models import *
 """
 In the same way that Django provides both Form classes and ModelForm classes, REST framework includes both Serializer classes, and ModelSerializer classes.
 """
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(many=True,queryset=Snippet.objects.all())
     class Meta:
         model = User
-        fields = ['url' , 'username' , 'email' , 'groups']
+        fields = ['id' , 'username' , 'snippets']
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -48,9 +49,10 @@ class SnippetSerializer(serializers.Serializer):
         instance.language = validated_data.get('language', instance.language)
         instance.style = validated_data.get('style', instance.style)
         instance.save()
-        return instances
+        return instance
 
 class SnippetModelSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Snippet
         fields = '__all__'
